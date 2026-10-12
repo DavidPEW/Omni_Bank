@@ -1,54 +1,16 @@
-Actividad 2
+[Clientes] 1 ------------ N [Cuentas]
+- cliente_id (PK)             - cuenta_id (PK)
+- nombre                      - cliente_id (FK)
+- correo                      - moneda
+- telefono                    - tipo_cuenta
+- fecha_nacimiento            - saldo_actual
+- tax_id                      - limite_credito
 
-
-
-Cliente
-
-\-Cliente\_id(pk)
-
-\-Nombre
-
-\-Tax\_id
-
-\-Correo
-
-\-teléfono
-
-\-fecha de nacimiento
-
-
-
-Cuenta
-
-\-Cuenta\_id(pk)
-
-\-Cliente\_id(fk)
-
-\-Saldo
-
-\-Tipo\_de\_cuenta
-
-\-Limite\_de\_Credito
-
-
-
-Transacciones
-
-\-Transacciones\_id(pk)
-
-\-Cuenta\_id(fk)
-
-\-monto
-
-\-fecha\_del\_movimiento
-
-\-Tipo
-
-\-Origen 
-
-\-Destino
-
-
-
-Cliente 1----N Cuentas 1-----N Transacciones
-
+                   (Cuenta Origen)
+[Cuentas] 1 ------------------------- N [Transacciones]
+                                          - transaccion_id (PK)
+                   (Cuenta Destino)       - from_account (FK -> Cuentas)
+[Cuentas] 1 ------------------------- N   - to_account (FK -> Cuentas)
+                                          - monto
+                                          - tipo_transaccion
+                                          - fecha_completada
