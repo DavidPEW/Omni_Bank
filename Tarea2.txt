@@ -1,0 +1,32 @@
+Tarea 2 - Esquema de Base de Datos y Relaciones
+
+[Clientes] 1 ------------ N [Cuentas]
+- cliente_id (PK, UUID)
+- nombre
+- correo
+- telefono
+- fecha_nacimiento
+- tax_id (UNIQUE)
+- is_active (BOOLEAN, Soft Delete)
+
+[Cuentas]
+- cuenta_id (PK, UUID)
+- cliente_id (FK, UUID)
+- moneda
+- tipo_cuenta
+- saldo_actual (CHECK: >= 0)
+- limite_credito
+- updated_at (TIMESTAMP, NFR)
+
+Relación con Transacciones:
+[Cuentas] (Origen) 1 ---\
+                         +---> N [Transacciones]
+[Cuentas] (Destino) 1 --/
+
+[Transacciones]
+- transaccion_id (PK, UUID)
+- from_account (FK, UUID -> Cuentas)
+- to_account (FK, UUID -> Cuentas)
+- monto
+- tipo_transaccion
+- fecha_completada
