@@ -1,7 +1,7 @@
 Tarea 3
 
 1.-Evaluación de la Teoría: ¿Tiene razón el auditor de que una columna de saldo calculado es técnicamente un dato derivado/redundante según la teoría estricta de normalización pura?
-El auditor junior tiene la razón desde una perspectiva puramente académica y teórica de normalización. En una base de datos en 3NF estricta y absoluta, no se deberían almacenar valores derivados que puedan calcularse a partir de otros campos transaccionales (como sería un SUM(monto) del historial), dado que se añade riesgo de inconsistencia al duplicar o derivar estados sin dependencia funcional directa indivisible.
+El auditor junior tiene la razón desde una perspectiva puramente académica y teórica de normalización. En una base de datos en 3NF estricta y absoluta, no se deberían almacenar valores derivados que puedan calcularse a partir de otros campos transaccionales (como sería un SUM(monto) del historial), dado que se añade riesgo de inconsistencia al duplicar o derivar estados sin dependencia funcional directa indivisible.  
 
 2.-El Problema del Rendimiento (La Justificación del Mundo Real): Imagina que un cliente comercial masivo tiene un historial continuo de 250,000 transacciones acumuladas a lo largo de 5 años.
 
