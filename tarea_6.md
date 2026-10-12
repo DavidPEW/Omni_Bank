@@ -1,44 +1,35 @@
-# Actividad 6: Evolucionando el Core bancario
+Tarea 6 - Diagnóstico de Bloqueos en Producción y Despliegues Zero-Downtime
 
-Archivo: `migration_01_core_evolution.sql`
+1. Diagnóstico de Causa Raíz Computacional (AccessExclusiveLock)
 
-```sql
-Create TYPE core.loan_status_enum AS ENUM ('Active', 'PAID', 'DEFAULTED', 'CANCELLED');
+El incidente inaceptable en producción fue desencadenado directamente por un desconocimiento operativo y del motor en transiciones en caliente. Cuando se ejecuta un mandato directo ADD CONSTRAINT ... CHECK (...) sobre una entidad que alberga ya transacciones en disco duro en vivacidad continua de millones de filas:
 
-BEGIN;
+El bloqueo crítico: PostgreSQL se ve obligado a paralizar y detener las operaciones en esa tabla para garantizar una fotografía y certidumbre relacional intacta de los datos en tanto procede al escaneo secuencial e indexado computacional, revisando renglón a renglón todo su gigantesco volumen.
 
-ALTER TABLE Core.Customers
-ADD COLUMN credit_score Integer NULL;
+Impacto operativo: Para hacer esto, adquiere irrebatiblemente un bloqueo de nivel absoluto del sistema: un AccessExclusiveLock. Este es el único bloqueo y de máxima gravedad en PostgreSQL que le cierra tajantemente las puertas tanto a consultas de lectura (SELECT) como a transacciones de modificación o inserción bancarias (INSERT / UPDATE), provocando caídas de servicio y agotamiento de conexiones (Error 504 Gateway Timeout).
 
-ALTER TABLE Core.Customers
+2. Solución Empresarial en Dos Etapas para Despliegues Sin Interrupción (Zero-Downtime Migration)
 
-ADD Constraint chk_customers_credit_score_range CHECK (Credit_score BETWEEN 300 AND 850);
+Para blindar nuestras tablas en entornos intensivos productivos y dar carpetazo definitivo a esta clase de cataclismos operativos, establecemos el siguiente estándar procedimental en dos tiempos:
 
-Alter TABLE Core.accounts
-ADD Column iban VARCHAR(34) NULL;
+-- ETAPA 1: Inyección transaccional en caliente sin escaneo retrógrado de bloqueo inquebrantable
+-- Le informamos explícitamente a PostgreSQL la cláusula "NOT VALID"
+ALTER TABLE core.transactions 
+    ADD CONSTRAINT chk_transactions_description_valid 
+    CHECK (LENGTH(TRIM(description)) >= 5) NOT VALID;
 
-Alter TABLE Core.accounts
-ADD CONSTRAINT uq_accounts_iban UNIQUE (iban);
+-- El motor inserta pacíficamente la nueva regla en los metadatos del catálogo en un parpadeo de tiempo, 
+-- aplicando instantáneamente la protección sobre cualquier transaccionalidad NUEVA que llegue en el futuro (INSERT/UPDATE)
+-- sin molestarse, escanear ni estorbar a los millones de filas antiguas consolidadas y en sosiego en el disco.
 
-Alter TABLE Core.loans
-ALTER COLUMN status TYPE core.loan_status_enum
-USING status::core.loan_status_enum;
 
-COMMIT;
-```
+-- ETAPA 2: Validación Asíncrona Pasiva sin Caídas de Servicio ni bloqueos masivos
+-- En una sesión o mandato posterior (ideal para ventanas de bajamar operante, o inmediatamente después de la primera)
+ALTER TABLE core.transactions 
+    VALIDATE CONSTRAINT chk_transactions_description_valid;
 
-1. Este bloqueo fue generado por el comando ya que este hacía una validación de todas la millones de transacciones que estan almacenadas provocando el cierre de nuevas solicitudes por lo que cuando alguna terminal intentaba hacer una operación no se completaba y daba error.
-
-2. Para crear un escaneo sin bloqueo
-
-```sql
-ALTER TABLE Core.transactions
-ADD CONSTRAINT chk_transactions_description_valid CHECK (LENGTH(TRIM(description))>=5)
-NOT VALID;
-
-Paso 2: Validacion Posterior
-
-ALTER TABLE Core.transactions
-VALIDATE CONSTRAINT chk_transactions_description_valid
--valid
-```
+-- Al ejecutarse en su segunda fase con VALIDATE CONSTRAINT, PostgreSQL efectúa paulatinamente en segundo plano
+-- la inspección, escaneo y fiscalización gradual del histórico de los renglones anticuados.
+-- En este ciclo especial, el motor se abstiene rígidamente y renuncia al terrible bloqueo AccessExclusiveLock;
+-- adopta únicamente un bloqueo muchísimo más ligero y amigable (ShareUpdateExclusiveLock), que permite y consiente en continuidad
+-- y en real time la ejecución pacífica de SELECTs e inserciones operativas de los clientes concurrentes sin inyectar latencias.
