@@ -1,32 +1,13 @@
-Actividad 1
+1. Lista de Entidades:
 
-Respuestas
+Clientes (Customers)
+Cuentas (Accounts)
+Transacciones (Transactions)
+2. Requerimientos Funcionales (RF):
 
-1.-Entidades
--Clientes
--Cuentas
--Transacciones
-2.-Requerimientos
--Cliente
-	-Nombre completo
-	-Correo electrónico
-	-Numero de teléfono
-	-Fecha de nacimiento
-	-Numero de identificación Fiscal
--Cuentas
-	-Numero de cuenta
-	-Tipo de moneda
-	-Tipo de cuenta
-	-Saldo actual
-	-Limite de crédito
--Transacciones
-	-Monto
-	-Tipo
-	-Origen
-	-Tipo
-	-Destino
-	-Fecha
-Requerimientos NO funcionales (NFR)
+RF1: El sistema debe almacenar de los Clientes: nombre, correo, teléfono, fecha de nacimiento y Tax ID.
+RF2: El sistema debe almacenar de las Cuentas: número de cuenta, moneda, tipo de cuenta, saldo actual y límite de crédito, y a qué cliente pertenecen.
+RF3: El sistema debe almacenar de las Transacciones: cuenta origen, cuenta destino, monto, tipo de transacción y fecha/hora exacta.
+3. Restricción de unicidad:
 
-1.-El numero de identificación fiscal
-2.-El numero de una cuenta
+El sistema no debe permitir que dos clientes tengan el mismo Tax ID o número de identificación fiscal (Debe ser UNIQUE).
