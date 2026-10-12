@@ -1,0 +1,4 @@
+1.-La base de datos debe impedir automáticamente los valores negativos
+2.-Las cuentas inactivas deben ser marcadas como inactivas en lugar de ser eliminadas
+3.-La base de datos debe de registrar de forma obligatoria la fecha y hora en la que  
+se modifique cualquier cuenta
