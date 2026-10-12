@@ -1,0 +1,39 @@
+Cliente
+
+Cliente_id(pk)  | UUID | No deben ser negativos deben ser aleatorios
+Nombre 		|      |
+Tax_id		|      | Deben ser unicos
+Correo		|      |
+Telefono	|      |
+Fecha_nacimeinto|      |
+Inactive	|      |
+_____________________________________________________________________
+							1
+							|
+							N
+_____________________________________________________________________
+
+Cuentas
+
+Cuenta_id(pk)	| UUID |
+Cliente_id(fk)  | UUID |
+Saldo		|      | No puede ser negativo
+Tipo_de_cuenta	|      |
+Tipo_de_moneda	|      |
+Limite_de_credito|      |
+Mod_t		|DATETIME| No puede ser negativo
+____________________________________________________________________
+							N
+							|
+							N
+____________________________________________________________________
+
+Transacciones
+
+Transacion_id(pk)| UUID |
+Cuenta_id(fk)	|  UUID |
+Monto		|      |
+Fecha_del_mov	|      |
+Tipo		|      |
+Origen		|      |
+Destino		|      |
