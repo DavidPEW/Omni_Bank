@@ -1,0 +1,32 @@
+Actividad 1
+
+Respuestas
+
+1.-Entidades
+-Clientes
+-Cuentas
+-Transacciones
+2.-Requerimientos
+-Cliente
+	-Nombre completo
+	-Correo electrónico
+	-Numero de teléfono
+	-Fecha de nacimiento
+	-Numero de identificación Fiscal
+-Cuentas
+	-Numero de cuenta
+	-Tipo de moneda
+	-Tipo de cuenta
+	-Saldo actual
+	-Limite de crédito
+-Transacciones
+	-Monto
+	-Tipo
+	-Origen
+	-Tipo
+	-Destino
+	-Fecha
+Requerimientos NO funcionales (NFR)
+
+1.-El numero de identificación fiscal
+2.-El numero de una cuenta
