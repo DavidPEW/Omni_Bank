@@ -1,14 +1,8 @@
-CREATE TYPE tipo_Moneda AS ENUM('USD','EUR','MXN')
-CREATE TYPE tipo_Cuenta AS ENUM('CHECKING','SAVINGS','CREDIT')
-CREATE TYPE tipo_Transaccion AS ENUM('DEPOSIT','WHITDRAW')
+-- Monedas admitidas
+CREATE TYPE core.tipo_moneda AS ENUM ('USD', 'EUR', 'MXN', 'GBP');
 
---  Cuenta              Tipo de datos
-    saldo_actual    =   NUMERIC
-    mod_cuenta  =   TIMESTAMPTZ
-    pk y fk = UUID
+-- Tipos de cuentas de clientes
+CREATE TYPE core.tipo_cuenta AS ENUM ('CHECKING', 'SAVINGS', 'CREDIT');
 
-    --Numeric a diferencia de float no redondea
-
-    --TIEMSTAMPZ absorbe la zona horaria del usuario
-
-    --UUID genera aleatoriamente los digitos
+-- Categorizaciones transaccionales permitidas
+CREATE TYPE core.tipo_transaccion AS ENUM ('DEPOSIT', 'WITHDRAWAL', 'TRANSFER');
