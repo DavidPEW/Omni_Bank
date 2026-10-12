@@ -1,7 +1,8 @@
-CREATE DOMAIN texto_obligatorio CHECK (VALUE <> '' AND LENGTH(TRIM(VALUE)) > 0)
+-- Dominio estricto de monedas admitidas por la institución
+CREATE TYPE core.tipo_moneda AS ENUM ('USD', 'EUR', 'MXN', 'GBP');
 
-CREATE DOMAIN monto_financiero CHECK(monto >= 0.00)
+-- Dominio para la clasificación de cuentas bancarias de los clientes
+CREATE TYPE core.tipo_cuenta AS ENUM ('CHECKING', 'SAVINGS', 'CREDIT');
 
---monto financiero se utilizara para
--- -Saldo actual
--- -monto_tx
+-- Catálogo oficial de tipos de transacciones financieras permitidas
+CREATE TYPE core.tipo_transaccion AS ENUM ('DEPOSIT', 'WITHDRAWAL', 'TRANSFER');
